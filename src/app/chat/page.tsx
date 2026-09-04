@@ -28,7 +28,8 @@ export default function ChatPage() {
     setLoading(true)
 
     try {
-      const res = await fetch('http://localhost:8080/api/v1/chat', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://insurance-app-api.bayuanugerah.my.id/api/v1'
+      const res = await fetch(`${apiUrl}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
