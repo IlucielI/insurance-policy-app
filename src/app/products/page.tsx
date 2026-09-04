@@ -5,6 +5,7 @@ import Link from 'next/link'
 
 interface Product {
   id: string
+  slug?: string
   name: string
   category: string
   description: string
@@ -36,31 +37,34 @@ export default function ProductsPage() {
       // Fallback mock data for demo
       setProducts([
         {
-          id: '1',
-          name: 'Asuransi Jiwa Murni',
+          id: 'asuransi-jiwa-premium',
+          slug: 'asuransi-jiwa-premium',
+          name: 'Asuransi Jiwa Premium',
           category: 'life',
-          description: 'Perlindungan finansial untuk keluarga tercinta dengan santunan meninggal dunia.',
+          description: 'Perlindungan finansial untuk keluarga tercinta dengan santunan meninggal dunia hingga Rp 5 miliar.',
+          min_sum_assured: 100000000,
+          max_sum_assured: 2000000000,
+          base_premium_rate: 0.55
+        },
+        {
+          id: 'asuransi-kesehatan-plus',
+          slug: 'asuransi-kesehatan-plus',
+          name: 'Asuransi Kesehatan Plus',
+          category: 'health',
+          description: 'Biaya perawatan medis dan rawat inap dengan coverage lengkap di rumah sakit seluruh Indonesia.',
           min_sum_assured: 50000000,
           max_sum_assured: 1000000000,
-          base_premium_rate: 0.5
+          base_premium_rate: 0.3
         },
         {
-          id: '2',
-          name: 'Asuransi Kesehatan Premium',
-          category: 'health',
-          description: 'Biaya perawatan medis dan rawat inap di rumah sakit seluruh Indonesia.',
-          min_sum_assured: 10000000,
-          max_sum_assured: 500000000,
-          base_premium_rate: 1.2
-        },
-        {
-          id: '3',
-          name: 'Asuransi Kendaraan Komprehensif',
+          id: 'asuransi-kendaraan-comprehensive',
+          slug: 'asuransi-kendaraan-comprehensive',
+          name: 'Asuransi Kendaraan Comprehensive',
           category: 'vehicle',
-          description: 'Perlindungan all risk untuk mobil dan motor dari berbagai risiko.',
+          description: 'Perlindungan mobil dan motor dari risiko all risk dan TLO dengan coverage banjir & gempa.',
           min_sum_assured: 50000000,
           max_sum_assured: 500000000,
-          base_premium_rate: 2.5
+          base_premium_rate: 6.2
         }
       ])
     } finally {
