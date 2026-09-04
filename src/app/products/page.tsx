@@ -182,7 +182,7 @@ export default function ProductsPage() {
                 </div>
 
                 <Link
-                  href={`/products/${product.id}`}
+                  href={`/products/${product.slug || product.id}`}
                   className="block w-full text-center bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition"
                 >
                   Lihat Detail & Hitung Premi

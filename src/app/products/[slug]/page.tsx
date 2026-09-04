@@ -21,7 +21,7 @@ interface PremiumCalculation {
   total_premium: number
 }
 
-export default function ProductDetailPage({ params }: { params: { id: string } }) {
+export default function ProductDetailPage({ params }: { params: { slug: string } }) {
   const router = useRouter()
   const [product, setProduct] = useState<Product | null>(null)
   const [age, setAge] = useState('25')
@@ -32,7 +32,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
   useEffect(() => {
     // Mock product data (fallback jika API belum ada data)
     const mockProduct: Product = {
-      id: params.id,
+      id: params.slug,
       name: 'Asuransi Jiwa Premium',
       category: 'life',
       description: 'Perlindungan finansial komprehensif untuk keluarga tercinta dengan santunan meninggal dunia hingga Rp 5 miliar',
@@ -48,7 +48,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
       ]
     }
     setProduct(mockProduct)
-  }, [params.id])
+  }, [params.slug])
 
   const calculatePremium = async () => {
     setLoading(true)
@@ -222,7 +222,7 @@ export default function ProductDetailPage({ params }: { params: { id: string } }
                   </div>
 
                   <button
-                    onClick={() => router.push(`/application?product=${params.id}&premium=${calculation.total_premium}`)}
+                    onClick={() => router.push(`/application?product=${params.slug}&premium=${calculation.total_premium}`)}
                     className="w-full mt-6 bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
                   >
                     Ajukan Sekarang →
