@@ -54,7 +54,7 @@ export default function ProductDetailPage({ params }: { params: { slug: string }
     setLoading(true)
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1'
-      const response = await fetch(`${apiUrl}/products/${params.id}/calculate-premium`, {
+      const response = await fetch(`${apiUrl}/products/${params.slug}/calculate-premium`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
