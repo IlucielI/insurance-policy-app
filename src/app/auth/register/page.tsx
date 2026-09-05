@@ -1,11 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 export default function RegisterPage() {
   const router = useRouter()
+  const recaptchaRef = useRef<ReCAPTCHA>(null)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,10 +17,21 @@ export default function RegisterPage() {
   })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
+
+  const handleRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token)
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError('')
+
+    // Validate reCAPTCHA
+    if (!recaptchaToken) {
+      setError('Silakan selesaikan verifikasi reCAPTCHA')
+      return
+    }
 
     if (formData.password !== formData.confirmPassword) {
       setError('Password tidak cocok')
@@ -33,6 +46,22 @@ export default function RegisterPage() {
     setLoading(true)
 
     try {
+      // Verify reCAPTCHA with our backend
+      const recaptchaRes = await fetch('/api/verify-recaptcha', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: recaptchaToken })
+      })
+
+      if (!recaptchaRes.ok) {
+        setError('Verifikasi reCAPTCHA gagal')
+        recaptchaRef.current?.reset()
+        setRecaptchaToken(null)
+        setLoading(false)
+        return
+      }
+
+      // Proceed with registration
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://insurance-app-api.bayuanugerah.my.id/api/v1'
       const res = await fetch(`${apiUrl}/auth/register`, {
         method: 'POST',
@@ -51,14 +80,20 @@ export default function RegisterPage() {
       } else {
         const data = await res.json()
         setError(data.message || 'Pendaftaran gagal')
+        recaptchaRef.current?.reset()
+        setRecaptchaToken(null)
       }
     } catch (err) {
       console.error('Register error:', err)
       setError('Gagal terhubung ke server')
+      recaptchaRef.current?.reset()
+      setRecaptchaToken(null)
     } finally {
       setLoading(false)
     }
   }
+
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center px-4 py-12">
@@ -154,6 +189,16 @@ export default function RegisterPage() {
               />
             </div>
 
+            {/* reCAPTCHA v2 - Supports audio accessibility */}
+            <div className="flex justify-center">
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={siteKey}
+                onChange={handleRecaptchaChange}
+                hl="id"
+              />
+            </div>
+
             {/* Error Message */}
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
@@ -164,7 +209,7 @@ export default function RegisterPage() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !recaptchaToken}
               className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? 'Memproses...' : 'Daftar'}

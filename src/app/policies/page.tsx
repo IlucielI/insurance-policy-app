@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Link from 'next/link'
 
 interface Policy {
@@ -16,22 +16,49 @@ interface Policy {
   next_payment_date?: string
 }
 
+interface Filters {
+  search: string
+  status: string
+  dateFrom: string
+  dateTo: string
+}
+
 export default function PoliciesPage() {
   const [policies, setPolicies] = useState<Policy[]>([])
   const [loading, setLoading] = useState(true)
-  const [filter, setFilter] = useState<string>('all')
+  const [filters, setFilters] = useState<Filters>({
+    search: '',
+    status: 'all',
+    dateFrom: '',
+    dateTo: ''
+  })
 
   useEffect(() => {
     fetchPolicies()
-  }, [])
+  }, [filters])
 
   const fetchPolicies = async () => {
+    setLoading(true)
     try {
-      const res = await fetch('http://localhost:8080/api/v1/policies', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1'
+      
+      // Build query params
+      const params = new URLSearchParams()
+      if (filters.search) params.append('search', filters.search)
+      if (filters.status !== 'all') params.append('status', filters.status)
+      if (filters.dateFrom) params.append('date_from', filters.dateFrom)
+      if (filters.dateTo) params.append('date_to', filters.dateTo)
+      
+      const res = await fetch(`${apiUrl}/policies?${params.toString()}`, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         }
       })
+      
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`)
+      }
+      
       const data = await res.json()
       setPolicies(data.data || [])
     } catch (err) {
@@ -124,14 +151,28 @@ export default function PoliciesPage() {
     return labels[status] || status
   }
 
-  const filteredPolicies = policies.filter(p => 
-    filter === 'all' || p.status === filter
-  )
+  const stats = useMemo(() => ({
+    total: policies.length,
+    active: policies.filter(p => p.status === 'active').length,
+    totalCoverage: policies.reduce((sum, p) => sum + p.sum_assured, 0),
+    monthlyPremium: policies.filter(p => p.status === 'active').reduce((sum, p) => sum + (p.premium / 12), 0)
+  }), [policies])
+
+  const clearFilters = () => {
+    setFilters({
+      search: '',
+      status: 'all',
+      dateFrom: '',
+      dateTo: ''
+    })
+  }
+
+  const hasActiveFilters = filters.search || filters.status !== 'all' || filters.dateFrom || filters.dateTo
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-white border-b">
+      <header className="bg-white border-b sticky top-0 z-10 shadow-sm">
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <Link href="/" className="text-2xl font-bold text-blue-600">
             Insurance
@@ -158,79 +199,142 @@ export default function PoliciesPage() {
 
       <div className="container mx-auto px-4 py-8">
         {/* Page Header */}
-        <div className="mb-8">
+        <div className="mb-6">
           <h1 className="text-4xl font-bold mb-2">Polis Saya</h1>
           <p className="text-gray-600">Kelola dan pantau semua polis asuransi Anda</p>
         </div>
 
         {/* Stats Cards */}
-        <div className="grid md:grid-cols-4 gap-6 mb-8">
+        <div className="grid md:grid-cols-4 gap-6 mb-6">
           <div className="bg-white p-6 rounded-lg shadow-sm border">
             <p className="text-sm text-gray-600 mb-1">Total Polis</p>
-            <p className="text-3xl font-bold text-gray-900">{policies.length}</p>
+            <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-sm border">
             <p className="text-sm text-gray-600 mb-1">Polis Aktif</p>
-            <p className="text-3xl font-bold text-green-600">
-              {policies.filter(p => p.status === 'active').length}
-            </p>
+            <p className="text-3xl font-bold text-green-600">{stats.active}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-sm border">
             <p className="text-sm text-gray-600 mb-1">Total Pertanggungan</p>
-            <p className="text-2xl font-bold text-blue-600">
-              {formatCurrency(policies.filter(p => p.status === 'active').reduce((sum, p) => sum + p.sum_assured, 0))}
-            </p>
+            <p className="text-xl font-bold text-blue-600">{formatCurrency(stats.totalCoverage)}</p>
           </div>
           <div className="bg-white p-6 rounded-lg shadow-sm border">
             <p className="text-sm text-gray-600 mb-1">Premi Bulanan</p>
-            <p className="text-2xl font-bold text-orange-600">
-              {formatCurrency(policies.filter(p => p.status === 'active').reduce((sum, p) => sum + p.premium, 0))}
-            </p>
+            <p className="text-xl font-bold text-orange-600">{formatCurrency(stats.monthlyPremium)}</p>
           </div>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="mb-6 flex gap-2 flex-wrap">
-          {[
-            { key: 'all', label: 'Semua' },
-            { key: 'active', label: 'Aktif' },
-            { key: 'pending', label: 'Pending' },
-            { key: 'expired', label: 'Kedaluwarsa' }
-          ].map(tab => (
-            <button
-              key={tab.key}
-              onClick={() => setFilter(tab.key)}
-              className={`px-4 py-2 rounded-lg font-medium transition ${
-                filter === tab.key
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-50 border'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
+        {/* Search & Filters */}
+        <div className="bg-white rounded-lg shadow-sm border p-4 mb-6">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="font-semibold text-gray-900">🔍 Cari & Filter</h2>
+            {hasActiveFilters && (
+              <button
+                onClick={clearFilters}
+                className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+              >
+                Reset Filter
+              </button>
+            )}
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* Search */}
+            <div className="lg:col-span-2">
+              <label className="block text-xs font-medium text-gray-600 mb-2">
+                Cari Nomor Polis / Produk
+              </label>
+              <input
+                type="text"
+                placeholder="Cari POL-2026-001234, Asuransi Jiwa..."
+                value={filters.search}
+                onChange={e => setFilters(f => ({ ...f, search: e.target.value }))}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            {/* Status */}
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-2">
+                Status
+              </label>
+              <select
+                value={filters.status}
+                onChange={e => setFilters(f => ({ ...f, status: e.target.value }))}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="all">Semua Status</option>
+                <option value="active">Aktif</option>
+                <option value="pending">Pending</option>
+                <option value="expired">Kedaluwarsa</option>
+                <option value="cancelled">Dibatalkan</option>
+              </select>
+            </div>
+
+            {/* Date From */}
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-2">
+                Tanggal Mulai Dari
+              </label>
+              <input
+                type="date"
+                value={filters.dateFrom}
+                onChange={e => setFilters(f => ({ ...f, dateFrom: e.target.value }))}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* Date To - on new row for mobile */}
+            <div className="lg:col-start-4">
+              <label className="block text-xs font-medium text-gray-600 mb-2">
+                Tanggal Mulai Sampai
+              </label>
+              <input
+                type="date"
+                value={filters.dateTo}
+                onChange={e => setFilters(f => ({ ...f, dateTo: e.target.value }))}
+                className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Results count */}
+          <div className="mt-4 text-sm text-gray-600">
+            Menampilkan <span className="font-semibold">{policies.length}</span> polis
+          </div>
         </div>
 
         {/* Policies List */}
         {loading ? (
-          <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-4 text-gray-600">Memuat polis...</p>
-          </div>
-        ) : filteredPolicies.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-lg">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-blue-600 border-t-transparent"></div>
+            <p className="mt-4 text-gray-600 font-medium">Memuat polis...</p>
+          </div>
+        ) : policies.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-lg shadow-sm border">
             <div className="text-6xl mb-4">📋</div>
-            <p className="text-gray-600 mb-4">Tidak ada polis yang ditemukan</p>
-            <Link
-              href="/products"
-              className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
-            >
-              Beli Polis Baru
-            </Link>
+            <p className="text-gray-600 mb-4 text-lg">
+              {hasActiveFilters ? 'Tidak ada polis yang sesuai filter' : 'Tidak ada polis yang ditemukan'}
+            </p>
+            {hasActiveFilters ? (
+              <button
+                onClick={clearFilters}
+                className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+              >
+                Reset Filter
+              </button>
+            ) : (
+              <Link
+                href="/products"
+                className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+              >
+                Beli Polis Baru
+              </Link>
+            )}
           </div>
         ) : (
           <div className="space-y-4">
-            {filteredPolicies.map(policy => (
+            {policies.map(policy => (
               <div
                 key={policy.id}
                 className="bg-white rounded-lg shadow-sm border hover:shadow-md transition p-6"
