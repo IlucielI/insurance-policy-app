@@ -1,304 +1,176 @@
-# Insurance Policy Application (Customer App)
+# Insurance Policy App
 
-Frontend aplikasi customer untuk Insurance Policy System, dibangun menggunakan Next.js 14 dengan App Router dan Tailwind CSS.
+Next.js 16 insurance customer portal with Google reCAPTCHA v2 and Google OAuth authentication.
 
-## 🏗️ Tech Stack
+## Stack
 
-- **Next.js 14** (App Router, Server-Side Rendering)
-- **React 18** dengan TypeScript
-- **Tailwind CSS** untuk styling
-- **Fetch API** untuk backend integration
+- **Framework**: Next.js 16.3.4 (App Router)
+- **UI**: React 19, Tailwind CSS 4
+- **Auth**: NextAuth v5 (Google OAuth)
+- **Security**: Google reCAPTCHA v2 (checkbox with audio accessibility)
+- **API**: RESTful backend at `https://insurance-app-api.bayuanugerah.my.id/api/v1`
 
-## 🚀 Quick Start
+## Setup
 
-### Prerequisites
-
-- Node.js 20 or higher
-- npm atau yarn
-
-### 1. Clone Repository
-
-```bash
-git clone https://github.com/IlucielI/insurance-policy-app.git
-cd insurance-policy-app
-```
-
-### 2. Install Dependencies
+### 1. Install Dependencies
 
 ```bash
 npm install
-# atau
-yarn install
 ```
 
-### 3. Setup Environment Variables
+### 2. Environment Variables
 
-Copy `.env.example` ke `.env.local`:
+Copy the example file and fill in your credentials:
 
 ```bash
-cp .env.example .env.local
+cp .env.local.example .env.local
 ```
 
-Edit `.env.local`:
+Required environment variables in `.env.local`:
+
+#### reCAPTCHA v2 (Checkbox)
+Get keys from: https://www.google.com/recaptcha/admin
 
 ```env
-NEXT_PUBLIC_API_URL=http://localhost:8080/api/v1
+NEXT_PUBLIC_RECAPTCHA_SITE_KEY=your_site_key_here
+RECAPTCHA_SECRET_KEY=your_secret_key_here
 ```
 
-### 4. Run Development Server
+**Setup Instructions:**
+1. Go to Google reCAPTCHA Admin Console
+2. Register a new site with reCAPTCHA v2 "I'm not a robot" checkbox
+3. Add your domains (localhost for dev, production domain)
+4. Copy Site Key to `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`
+5. Copy Secret Key to `RECAPTCHA_SECRET_KEY`
+
+#### Google OAuth
+Get credentials from: https://console.cloud.google.com/apis/credentials
+
+```env
+GOOGLE_CLIENT_ID=your_client_id_here
+GOOGLE_CLIENT_SECRET=your_client_secret_here
+```
+
+**Setup Instructions:**
+1. Go to Google Cloud Console > APIs & Services > Credentials
+2. Create OAuth 2.0 Client ID (Web application)
+3. Add authorized redirect URIs:
+   - `http://localhost:3000/api/auth/callback/google` (development)
+   - `https://yourdomain.com/api/auth/callback/google` (production)
+4. Copy Client ID to `GOOGLE_CLIENT_ID`
+5. Copy Client Secret to `GOOGLE_CLIENT_SECRET`
+
+#### NextAuth Secret
+
+```env
+NEXTAUTH_SECRET=your_generated_secret_here
+NEXTAUTH_URL=http://localhost:3000
+```
+
+Generate secret with:
+```bash
+openssl rand -base64 32
+```
+
+For production, update `NEXTAUTH_URL` to your production domain.
+
+#### API URL
+
+```env
+NEXT_PUBLIC_API_URL=https://insurance-app-api.bayuanugerah.my.id/api/v1
+```
+
+### 3. Run Development Server
 
 ```bash
 npm run dev
-# atau
-yarn dev
 ```
 
-Aplikasi akan jalan di `http://localhost:3000`
+Open [http://localhost:3000](http://localhost:3000)
 
-### 5. Build for Production
+## Features
 
+### Authentication
+
+#### Register Page (`/auth/register`)
+- **reCAPTCHA v2 Integration**: Checkbox verification before registration
+- **Accessibility**: Supports audio challenge for visually impaired users
+- **Backend Verification**: Token verified server-side via `/api/verify-recaptcha`
+- Form fields: Name, Email, Phone, Password, Confirm Password
+- Client-side validation before API call
+
+#### Login Page (`/auth/login`)
+- **Email/Password Login**: Traditional login flow
+- **Google OAuth**: One-click sign-in with Google account
+- **Unified Flow**: Google OAuth users auto-registered to backend
+- Demo credentials provided for testing
+- Success message after registration redirect
+
+### API Routes
+
+#### `/api/auth/[...nextauth]/route.ts`
+- NextAuth v5 route handler
+- Google OAuth provider configuration
+- Custom callbacks:
+  - `signIn`: Sends Google user data to backend `/auth/google` endpoint
+  - `jwt`: Stores backend token in JWT
+  - `session`: Exposes backend token to client
+- Type-safe with extended NextAuth types
+
+#### `/api/verify-recaptcha/route.ts`
+- Server-side reCAPTCHA verification
+- Validates token with Google's API
+- Returns success/failure with error codes
+- Used by register page before backend registration
+
+### Security Features
+
+1. **reCAPTCHA v2**: Prevents bot registrations, supports audio accessibility
+2. **Server-side Verification**: reCAPTCHA token validated on backend
+3. **Google OAuth**: Secure third-party authentication via NextAuth
+4. **Password Validation**: Minimum 6 characters, client-side matching
+5. **Token Storage**: Auth tokens stored in localStorage after successful login
+
+### Backend Integration
+
+The app expects these backend endpoints:
+
+- `POST /auth/register`: Register new user (name, email, phone, password)
+- `POST /auth/login`: Login with email/password (returns token)
+- `POST /auth/google`: Google OAuth login/register (email, name, googleId, returns token)
+
+## Files Created/Modified
+
+### New Files
+- `src/app/api/auth/[...nextauth]/route.ts` - NextAuth v5 Google OAuth handler
+- `src/app/api/verify-recaptcha/route.ts` - reCAPTCHA server-side verification
+- `.env.local.example` - Environment variables template
+
+### Modified Files
+- `src/app/auth/register/page.tsx` - Added reCAPTCHA v2 checkbox
+- `src/app/auth/login/page.tsx` - Added Google OAuth sign-in button
+
+## TypeScript
+
+All code is fully typed with TypeScript 5. Custom type extensions for NextAuth are in the route handler.
+
+Build check:
 ```bash
-npm run build
-npm run start
-# atau
-yarn build
-yarn start
+npx tsc --noEmit
 ```
 
-## 📱 Pages & Features
+## Production Checklist
 
-### 🏠 Landing Page (`/`)
-- Hero section dengan CTA
-- Product preview cards (Jiwa, Kesehatan, Kendaraan)
-- How it works section (4 steps)
-- Chat CTA button
+Before deploying:
 
-### 📦 Products Listing (`/products`)
-- Grid layout produk asuransi
-- Filter by category (Jiwa, Kesehatan, Kendaraan)
-- Product cards dengan fitur utama
-- Link ke detail page
+- [ ] Set production `NEXTAUTH_URL` in environment
+- [ ] Add production domain to Google reCAPTCHA allowed domains
+- [ ] Add production callback URL to Google OAuth credentials
+- [ ] Generate secure `NEXTAUTH_SECRET` (never reuse dev secret)
+- [ ] Verify backend API CORS allows production domain
+- [ ] Test reCAPTCHA in production (works differently than localhost)
+- [ ] Test Google OAuth callback redirect in production
 
-### 📊 Product Detail (`/products/[id]`)
-- Product description lengkap
-- List manfaat & fitur
-- **Premium Calculator**:
-  - Input: Usia (18-65 tahun)
-  - Input: Uang Pertanggungan (Rp 500jt - Rp 5M)
-  - Output: Premi per bulan (real-time calculation)
-  - Formula: `base_premium × age_factor × coverage_factor`
-- CTA "Ajukan Sekarang" (redirect ke application form)
+## License
 
-### 📝 Application Form (`/application`)
-**2-Step Wizard:**
-
-**Step 1: Data Diri**
-- Nama lengkap
-- Email & telepon
-- Tanggal lahir
-- Jenis kelamin
-- No. KTP (16 digit)
-- Alamat lengkap
-
-**Step 2: Kesehatan & Pembayaran**
-- Pekerjaan
-- Riwayat penyakit (optional)
-- Status merokok
-- Ringkasan premi
-- Metode pembayaran
-- ✓ Accept terms & conditions
-
-**Submission:**
-- POST ke `/api/v1/applications`
-- Success: Show application number
-- Redirect ke home page
-
-### 💬 Chat (AI Assistant) (`/chat`)
-- Session-based chat interface
-- Send message → AI response
-- **RAG-powered**: Semantic search via pgvector
-- **Fallback mode**: Static helpful responses when LLM down
-- Chat history per session
-- Example queries:
-  - "Apa saja produk asuransi yang tersedia?"
-  - "Berapa premi untuk usia 25 tahun?"
-  - "Bagaimana cara mengajukan asuransi?"
-
-## 🎨 UI/UX Features
-
-- **Responsive Design** (mobile-first)
-- **Loading States** (skeleton screens)
-- **Error Handling** (user-friendly messages)
-- **Form Validation** (client-side)
-- **Optimistic UI** (instant feedback)
-- **Fallback Mock Data** (works when API down)
-
-## 🔌 API Integration
-
-**Backend endpoints used:**
-
-```typescript
-// Products
-GET ${API_URL}/products
-GET ${API_URL}/products/:id
-POST ${API_URL}/products/:id/calculate-premium
-
-// Applications
-POST ${API_URL}/applications
-
-// Chat
-POST ${API_URL}/chat
-GET ${API_URL}/chat/:sessionId/history
-```
-
-**Fallback strategy:**
-
-```typescript
-try {
-  const response = await fetch(apiUrl)
-  if (response.ok) {
-    const data = await response.json()
-    return data
-  }
-} catch (err) {
-  // Return mock data for demo
-  return mockData
-}
-```
-
-## 🐳 Docker
-
-**Build image:**
-
-```bash
-docker build -t insurance-app .
-```
-
-**Run container:**
-
-```bash
-docker run -d \
-  -p 3000:3000 \
-  -e NEXT_PUBLIC_API_URL=http://api-url/api/v1 \
-  --name insurance-app \
-  insurance-app
-```
-
-## 🧪 Testing
-
-```bash
-# Run tests (if configured)
-npm test
-
-# E2E tests (Playwright)
-npm run test:e2e
-```
-
-## 📂 Project Structure
-
-```
-src/
-├── app/
-│   ├── page.tsx                    # Landing page
-│   ├── layout.tsx                  # Root layout
-│   ├── products/
-│   │   ├── page.tsx                # Products listing
-│   │   └── [id]/page.tsx           # Product detail + calculator
-│   ├── application/page.tsx        # 2-step application form
-│   └── chat/page.tsx               # AI assistant chatbot
-├── components/                     # Reusable components (if any)
-└── styles/                         # Global styles
-```
-
-## 🎯 Key Components
-
-### Premium Calculator
-
-```typescript
-// Calculate premium formula
-const ageFactor = age < 30 ? 1.0 : age < 40 ? 1.2 : age < 50 ? 1.5 : 2.0
-const coverageFactor = coverageAmount / 500000000
-const totalPremium = basePremium * ageFactor * coverageFactor
-```
-
-### Chat Interface
-
-```typescript
-// Send message to AI
-const response = await fetch(`${API_URL}/chat`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    session_id: sessionId,
-    message: userMessage
-  })
-})
-const data = await response.json()
-// Display AI response
-```
-
-## 🚨 Troubleshooting
-
-**Problem: API connection failed**
-
-Solution: Check `NEXT_PUBLIC_API_URL` in `.env.local` matches backend URL
-
-**Problem: Premium calculator returns 0**
-
-Solution: Ensure age is between 18-65 and coverage amount is valid
-
-**Problem: Application form validation errors**
-
-Solution: All required fields (*) must be filled, check ID number format (16 digits)
-
-**Problem: Chat not responding**
-
-Solution: Backend LLM endpoint may be down, app uses fallback responses
-
-## 🔧 Configuration
-
-**Environment variables:**
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `NEXT_PUBLIC_API_URL` | Backend API base URL | `http://localhost:8080/api/v1` |
-
-## 📝 Development Workflow
-
-1. Create feature branch: `git checkout -b feat/feature-name`
-2. Make changes, test on `localhost:3000`
-3. Commit: `git commit -m "feat(scope): description"`
-4. Push & create PR
-5. Merge after code review
-
-## 🌐 Deployment
-
-**Deployed to:** http://insurance-app.bayuanugerah.my.id
-
-**Production build:**
-
-```bash
-npm run build
-# Output: .next/ folder (standalone mode)
-```
-
-**Environment (production):**
-
-```env
-NEXT_PUBLIC_API_URL=http://insurance-app-api.bayuanugerah.my.id/api/v1
-```
-
-## 📄 License
-
-MIT License - Bayu Anugerah
-
-## 🔗 Related Repositories
-
-- Backend API: https://github.com/IlucielI/insurance-policy-core-api
-- Admin CMS: https://github.com/IlucielI/insurance-policy-cms
-
-## 📧 Contact
-
-**Bayu Anugerah**  
-Email: bayu.anugerah99@gmail.com  
-GitHub: https://github.com/IlucielI
+Private
