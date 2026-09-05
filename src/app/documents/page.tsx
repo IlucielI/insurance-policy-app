@@ -34,12 +34,18 @@ function DocumentsContent() {
 
   const fetchDocuments = async () => {
     try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1'
       const params = new URLSearchParams()
       if (selectedPolicy) params.append('policy_id', selectedPolicy)
 
-      const res = await fetch(`http://localhost:8080/api/v1/documents?${params}`, {
+      const res = await fetch(`${apiUrl}/documents?${params}`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       })
+      
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`)
+      }
+      
       const data = await res.json()
       setDocuments(data.data || [])
     } catch (err) {

@@ -3,6 +3,7 @@
 import { useState, useEffect, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import IDCardOCR from '@/components/IDCardOCR'
 
 function ApplicationFormContent() {
   const router = useRouter()
@@ -32,6 +33,38 @@ function ApplicationFormContent() {
 
   const updateField = (field: string, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }))
+  }
+
+  const handleOCRData = (data: any) => {
+    // Map OCR extracted data to form fields
+    const updates: any = {}
+    
+    if (data.nama) updates.full_name = data.nama
+    if (data.nik) updates.id_number = data.nik
+    if (data.tanggal_lahir) {
+      // Convert DD-MM-YYYY or DD/MM/YYYY to YYYY-MM-DD
+      const parts = data.tanggal_lahir.split(/[-/]/)
+      if (parts.length === 3) {
+        const [day, month, year] = parts
+        const fullYear = year.length === 2 ? `20${year}` : year
+        updates.date_of_birth = `${fullYear}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+      }
+    }
+    if (data.jenis_kelamin) {
+      updates.gender = data.jenis_kelamin.toLowerCase().includes('laki') ? 'male' : 'female'
+    }
+    if (data.alamat) {
+      let address = data.alamat
+      if (data.rt && data.rw) address += ` RT ${data.rt}/RW ${data.rw}`
+      if (data.kelurahan) address += `, ${data.kelurahan}`
+      if (data.kecamatan) address += `, ${data.kecamatan}`
+      if (data.kota) address += `, ${data.kota}`
+      if (data.provinsi) address += `, ${data.provinsi}`
+      updates.address = address
+    }
+    if (data.pekerjaan) updates.occupation = data.pekerjaan
+
+    setFormData(prev => ({ ...prev, ...updates }))
   }
 
   const handleSubmit = async () => {
@@ -110,6 +143,9 @@ function ApplicationFormContent() {
           {/* Step 1: Data Diri */}
           {step === 1 && (
             <div className="space-y-6">
+              {/* OCR Upload Component */}
+              <IDCardOCR onDataExtracted={handleOCRData} />
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap *</label>
                 <input

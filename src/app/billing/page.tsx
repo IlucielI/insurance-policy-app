@@ -27,6 +27,8 @@ interface PaymentMethod {
 function BillingContent() {
   const searchParams = useSearchParams()
   const preselectedPolicyId = searchParams.get('policy_id')
+  const orderId = searchParams.get('order_id')
+  const paymentParam = searchParams.get('payment')
 
   const [payments, setPayments] = useState<Payment[]>([])
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([])
@@ -35,17 +37,49 @@ function BillingContent() {
   const [showPaymentModal, setShowPaymentModal] = useState(false)
   const [selectedPayment, setSelectedPayment] = useState<Payment | null>(null)
   const [autoPayEnabled, setAutoPayEnabled] = useState(false)
+  const [paymentStatus, setPaymentStatus] = useState<'success' | 'pending' | 'failed' | null>(null)
+  const [verifiedPayment, setVerifiedPayment] = useState<any>(null)
 
   useEffect(() => {
+    // SECURITY FIX: Verify payment from backend DB, not URL params
+    if (orderId) {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/billing/verify/${orderId}`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+        .then(res => {
+          if (!res.ok) throw new Error('Verification failed')
+          return res.json()
+        })
+        .then(data => {
+          setVerifiedPayment(data)
+          // Set status based on REAL DB data, not URL params
+          setPaymentStatus(
+            data.status === 'paid' ? 'success' :
+            data.status === 'pending' ? 'pending' : 'failed'
+          )
+        })
+        .catch(() => {
+          setPaymentStatus('failed')
+        })
+    }
+    
     fetchPayments()
     fetchPaymentMethods()
   }, [])
 
   const fetchPayments = async () => {
     try {
-      const res = await fetch('http://localhost:8080/api/v1/payments', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1'
+      const res = await fetch(`${apiUrl}/payments`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       })
+      
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`)
+      }
+      
       const data = await res.json()
       setPayments(data.data || [])
     } catch (err) {
@@ -104,9 +138,15 @@ function BillingContent() {
 
   const fetchPaymentMethods = async () => {
     try {
-      const res = await fetch('http://localhost:8080/api/v1/payment-methods', {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1'
+      const res = await fetch(`${apiUrl}/payment-methods`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       })
+      
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}: ${res.statusText}`)
+      }
+      
       const data = await res.json()
       setPaymentMethods(data.data || [])
     } catch (err) {
@@ -164,35 +204,63 @@ function BillingContent() {
     return diffDays
   }
 
-  const handlePayment = (payment: Payment) => {
+  const handlePayment = async (payment: Payment) => {
     setSelectedPayment(payment)
-    setShowPaymentModal(true)
-  }
-
-  const processPayment = async () => {
-    if (!selectedPayment) return
-
+    
     try {
-      const res = await fetch(`http://localhost:8080/api/v1/payments/${selectedPayment.id}/pay`, {
+      // Call backend to create Midtrans transaction
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1'
+      const res = await fetch(`${apiUrl}/billing/pay`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          payment_method_id: paymentMethods.find(pm => pm.is_default)?.id
-        })
+        body: JSON.stringify({ invoice_id: payment.id })
       })
-
-      if (res.ok) {
-        alert('Pembayaran berhasil!')
-        setShowPaymentModal(false)
-        fetchPayments()
+      
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.error || `HTTP ${res.status}`)
       }
+      
+      const data = await res.json()
+      
+      // Load Midtrans Snap and open payment popup
+      const { openSnapPayment } = await import('@/lib/midtrans')
+      
+      await openSnapPayment({
+        token: data.snap_token,
+        onSuccess: (result) => {
+          console.log('Payment success:', result)
+          alert('Pembayaran berhasil! Status: ' + result.transaction_status)
+          fetchPayments()
+        },
+        onPending: (result) => {
+          console.log('Payment pending:', result)
+          alert('Pembayaran menunggu konfirmasi. Order ID: ' + result.order_id)
+          fetchPayments()
+        },
+        onError: (result) => {
+          console.error('Payment error:', result)
+          alert('Pembayaran gagal: ' + result.status_message)
+        },
+        onClose: () => {
+          console.log('Payment popup closed')
+        }
+      })
+      
     } catch (err) {
-      console.error('Payment failed:', err)
-      alert('Pembayaran gagal. Silakan coba lagi.')
+      console.error('Failed to create payment:', err)
+      alert('Gagal membuat transaksi: ' + (err instanceof Error ? err.message : 'Unknown error'))
     }
+  }
+
+  const processPayment = async () => {
+    // Legacy modal payment - kept for fallback
+    if (!selectedPayment) return
+    alert('Use direct payment button instead')
+    setShowPaymentModal(false)
   }
 
   const filteredPayments = payments.filter(p => {
