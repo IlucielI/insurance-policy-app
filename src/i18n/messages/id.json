@@ -1,0 +1,301 @@
+{
+  "common": {
+    "loading": "Memuat...",
+    "error": "Terjadi kesalahan",
+    "success": "Berhasil",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "view": "Lihat",
+    "close": "Tutup",
+    "submit": "Kirim",
+    "search": "Cari",
+    "filter": "Filter",
+    "back": "Kembali",
+    "next": "Selanjutnya",
+    "previous": "Sebelumnya",
+    "download": "Unduh",
+    "upload": "Unggah",
+    "confirm": "Konfirmasi",
+    "yes": "Ya",
+    "no": "Tidak"
+  },
+  "nav": {
+    "home": "Beranda",
+    "products": "Produk",
+    "policies": "Polis",
+    "claims": "Klaim",
+    "billing": "Tagihan",
+    "profile": "Profil",
+    "settings": "Pengaturan",
+    "support": "Bantuan",
+    "chat": "Chat",
+    "documents": "Dokumen",
+    "application": "Aplikasi",
+    "logout": "Keluar",
+    "login": "Masuk",
+    "register": "Daftar"
+  },
+  "home": {
+    "hero": {
+      "title": "Asuransi yang Transparan & Mudah Dipahami",
+      "subtitle": "Lindungi masa depan Anda dan keluarga dengan produk asuransi yang fleksibel, premi terjangkau, dan proses klaim yang cepat.",
+      "viewProducts": "Lihat Produk",
+      "calculatePremium": "Hitung Premi"
+    },
+    "products": {
+      "title": "Produk Asuransi Kami",
+      "life": {
+        "title": "Asuransi Jiwa",
+        "description": "Perlindungan finansial untuk keluarga tercinta",
+        "features": {
+          "deathBenefit": "Santunan meninggal dunia",
+          "flexiblePremium": "Premi fleksibel",
+          "cashValue": "Nilai tunai"
+        }
+      },
+      "health": {
+        "title": "Asuransi Kesehatan",
+        "description": "Biaya perawatan medis dan rawat inap",
+        "features": {
+          "inpatient": "Rawat inap",
+          "outpatient": "Rawat jalan",
+          "medicine": "Obat-obatan"
+        }
+      },
+      "vehicle": {
+        "title": "Asuransi Kendaraan",
+        "description": "Perlindungan mobil dan motor dari risiko",
+        "features": {
+          "allRisk": "All risk",
+          "tlo": "TLO",
+          "thirdParty": "Tanggung jawab pihak ketiga"
+        }
+      },
+      "viewDetail": "Lihat Detail"
+    },
+    "howItWorks": {
+      "title": "Cara Mengajukan",
+      "step1": {
+        "title": "Pilih Produk",
+        "description": "Browse produk yang sesuai kebutuhan"
+      },
+      "step2": {
+        "title": "Hitung Premi",
+        "description": "Simulasi premi dengan kalkulator"
+      },
+      "step3": {
+        "title": "Isi Formulir",
+        "description": "Lengkapi data diri dan kesehatan"
+      },
+      "step4": {
+        "title": "Polis Terbit",
+        "description": "Bayar dan polis langsung aktif"
+      }
+    },
+    "whyChooseUs": {
+      "title": "Kenapa Memilih Kami?",
+      "subtitle": "Pengalaman asuransi modern dengan teknologi AI dan layanan 24/7",
+      "instant": {
+        "title": "Proses Instan",
+        "description": "Quote dalam 90 detik, approval dalam 3 menit. Tidak ada paperwork yang rumit."
+      },
+      "aiPowered": {
+        "title": "AI-Powered",
+        "description": "Chatbot cerdas membantu pilih produk. AI review dokumen otomatis untuk approval cepat."
+      },
+      "transparent": {
+        "title": "Harga Transparan",
+        "description": "Tidak ada biaya tersembunyi. Semua tercantum jelas di quote. Bandingkan produk dengan mudah."
+      },
+      "support": {
+        "title": "Support 24/7",
+        "description": "Tim customer service siap bantu kapan saja. Live chat, email, atau telepon."
+      },
+      "flexible": {
+        "title": "Fleksibel",
+        "description": "Customize coverage sesuai budget. Tambah atau kurangi manfaat kapan saja."
+      },
+      "fastClaim": {
+        "title": "Klaim Cepat",
+        "description": "Klaim diproses dalam 3 hari kerja. Upload dokumen langsung dari app."
+      }
+    },
+    "faq": {
+      "title": "Pertanyaan yang Sering Diajukan",
+      "q1": {
+        "question": "Berapa lama proses approval aplikasi asuransi?",
+        "answer": "Untuk aplikasi standar, AI kami bisa approve dalam 3 menit. Untuk kasus yang perlu review manual (pre-existing condition, sum assured tinggi), maksimal 24 jam kerja."
+      },
+      "q2": {
+        "question": "Apakah ada biaya tersembunyi?",
+        "answer": "Tidak ada! Semua biaya tertera jelas di quote. Premi yang Anda lihat adalah harga final yang harus dibayar, sudah termasuk pajak dan biaya admin."
+      },
+      "q3": {
+        "question": "Bagaimana cara mengajukan klaim?",
+        "answer": "Sangat mudah! Login ke dashboard Anda, klik \"File Claim\", upload foto/dokumen, dan submit. Untuk klaim sederhana, AI kami bisa approve dalam 3 menit. Tim kami akan segera menghubungi untuk klaim kompleks."
+      },
+      "q4": {
+        "question": "Apakah bisa bundle beberapa produk asuransi?",
+        "answer": "Ya! Kami mendorong customer untuk bundle. Diskon bundle bisa mencapai 25% untuk kombinasi 3 produk atau lebih. Misalnya: Jiwa + Kesehatan + Kendaraan = hemat hingga Rp 500.000/tahun."
+      },
+      "q5": {
+        "question": "Bagaimana cara membatalkan polis?",
+        "answer": "Anda bisa cancel kapan saja tanpa penalty di 14 hari pertama (cooling-off period). Setelah itu, proses cancellation bisa dilakukan melalui dashboard dengan refund prorate sesuai sisa periode polis."
+      },
+      "q6": {
+        "question": "Apakah data pribadi saya aman?",
+        "answer": "Keamanan data adalah prioritas utama kami. Kami menggunakan enkripsi tingkat bank (256-bit SSL), compliance dengan regulasi OJK, dan tidak pernah membagikan data Anda ke pihak ketiga tanpa izin."
+      }
+    },
+    "cta": {
+      "title": "Siap Melindungi yang Anda Cintai?",
+      "subtitle": "Dapatkan quote gratis dalam 90 detik. Tidak perlu kartu kredit. Tidak ada kewajiban.",
+      "viewAllProducts": "Lihat Semua Produk",
+      "chatWithAI": "Chat dengan AI Assistant",
+      "features": "✓ Proses 90 detik  ✓ Tanpa biaya tersembunyi  ✓ Support 24/7"
+    },
+    "footer": {
+      "copyright": "© 2026 Insurance Policy System. Technical Test Project.",
+      "credits": "Bayu Anugerah • PT Logika Sarana Teknologi"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Masuk ke akun Anda",
+      "email": "Email",
+      "password": "Password",
+      "emailPlaceholder": "nama@email.com",
+      "passwordPlaceholder": "••••••••",
+      "loginButton": "Masuk",
+      "googleLogin": "Masuk dengan Google",
+      "processing": "Memproses...",
+      "orLoginWith": "Atau masuk dengan email",
+      "noAccount": "Belum punya akun?",
+      "registerNow": "Daftar sekarang",
+      "backToHome": "← Kembali ke Beranda",
+      "demoAccount": "Demo Account:",
+      "errors": {
+        "invalidCredentials": "Email atau password salah",
+        "serverError": "Gagal terhubung ke server"
+      },
+      "success": {
+        "registered": "Registrasi berhasil! Silakan login."
+      }
+    },
+    "register": {
+      "title": "Daftar Akun Baru",
+      "fullName": "Nama Lengkap",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Konfirmasi Password",
+      "registerButton": "Daftar",
+      "processing": "Memproses...",
+      "haveAccount": "Sudah punya akun?",
+      "loginNow": "Masuk sekarang",
+      "errors": {
+        "passwordMismatch": "Password tidak cocok",
+        "serverError": "Gagal terhubung ke server"
+      }
+    }
+  },
+  "products": {
+    "title": "Produk Asuransi",
+    "subtitle": "Pilih produk yang sesuai dengan kebutuhan Anda",
+    "filters": {
+      "all": "Semua",
+      "life": "Jiwa",
+      "health": "Kesehatan",
+      "vehicle": "Kendaraan"
+    },
+    "coverage": "Uang Pertanggungan",
+    "premiumFrom": "Premi mulai dari",
+    "perMonth": "/bulan",
+    "viewDetail": "Lihat Detail",
+    "apply": "Ajukan Sekarang"
+  },
+  "policies": {
+    "title": "Polis Saya",
+    "subtitle": "Kelola semua polis asuransi Anda",
+    "status": {
+      "active": "Aktif",
+      "pending": "Pending",
+      "expired": "Kadaluarsa",
+      "cancelled": "Dibatalkan"
+    },
+    "policyNumber": "No. Polis",
+    "product": "Produk",
+    "premium": "Premi",
+    "coverage": "Uang Pertanggungan",
+    "startDate": "Tanggal Mulai",
+    "endDate": "Tanggal Berakhir",
+    "actions": "Aksi",
+    "viewDetails": "Lihat Detail",
+    "renew": "Perpanjang",
+    "cancel": "Batalkan",
+    "endorse": "Endorsement",
+    "noPolicies": "Belum ada polis aktif"
+  },
+  "claims": {
+    "title": "Klaim Saya",
+    "subtitle": "Ajukan dan pantau status klaim Anda",
+    "newClaim": "Ajukan Klaim Baru",
+    "claimNumber": "No. Klaim",
+    "policy": "Polis",
+    "type": "Jenis Klaim",
+    "amount": "Jumlah Klaim",
+    "date": "Tanggal",
+    "status": {
+      "draft": "Draft",
+      "submitted": "Diajukan",
+      "underReview": "Sedang Direview",
+      "approved": "Disetujui",
+      "rejected": "Ditolak",
+      "paid": "Dibayar"
+    },
+    "viewDetails": "Lihat Detail",
+    "noClaims": "Belum ada klaim"
+  },
+  "billing": {
+    "title": "Tagihan",
+    "subtitle": "Kelola pembayaran dan tagihan Anda",
+    "invoiceNumber": "No. Invoice",
+    "policy": "Polis",
+    "amount": "Jumlah",
+    "dueDate": "Jatuh Tempo",
+    "status": {
+      "paid": "Lunas",
+      "pending": "Belum Dibayar",
+      "overdue": "Terlambat"
+    },
+    "payNow": "Bayar Sekarang",
+    "viewInvoice": "Lihat Invoice",
+    "noInvoices": "Tidak ada tagihan"
+  },
+  "profile": {
+    "title": "Profil Saya",
+    "personalInfo": "Informasi Pribadi",
+    "fullName": "Nama Lengkap",
+    "email": "Email",
+    "phone": "Telepon",
+    "address": "Alamat",
+    "dateOfBirth": "Tanggal Lahir",
+    "idNumber": "No. KTP",
+    "updateProfile": "Update Profil",
+    "changePassword": "Ubah Password"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "language": "Bahasa",
+    "notifications": "Notifikasi",
+    "security": "Keamanan",
+    "preferences": "Preferensi"
+  },
+  "notifications": {
+    "title": "Notifikasi",
+    "markAsRead": "Tandai Sudah Dibaca",
+    "markAllAsRead": "Tandai Semua Sudah Dibaca",
+    "noNotifications": "Tidak ada notifikasi"
+  }
+}

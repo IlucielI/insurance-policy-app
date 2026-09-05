@@ -1,0 +1,301 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "close": "Close",
+    "submit": "Submit",
+    "search": "Search",
+    "filter": "Filter",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "download": "Download",
+    "upload": "Upload",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "policies": "Policies",
+    "claims": "Claims",
+    "billing": "Billing",
+    "profile": "Profile",
+    "settings": "Settings",
+    "support": "Support",
+    "chat": "Chat",
+    "documents": "Documents",
+    "application": "Application",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "home": {
+    "hero": {
+      "title": "Transparent & Easy to Understand Insurance",
+      "subtitle": "Protect your future and family with flexible insurance products, affordable premiums, and fast claim processing.",
+      "viewProducts": "View Products",
+      "calculatePremium": "Calculate Premium"
+    },
+    "products": {
+      "title": "Our Insurance Products",
+      "life": {
+        "title": "Life Insurance",
+        "description": "Financial protection for your loved ones",
+        "features": {
+          "deathBenefit": "Death benefit",
+          "flexiblePremium": "Flexible premium",
+          "cashValue": "Cash value"
+        }
+      },
+      "health": {
+        "title": "Health Insurance",
+        "description": "Medical and hospitalization coverage",
+        "features": {
+          "inpatient": "Inpatient care",
+          "outpatient": "Outpatient care",
+          "medicine": "Medications"
+        }
+      },
+      "vehicle": {
+        "title": "Vehicle Insurance",
+        "description": "Protection for your car and motorcycle",
+        "features": {
+          "allRisk": "All risk",
+          "tlo": "Total Loss Only",
+          "thirdParty": "Third party liability"
+        }
+      },
+      "viewDetail": "View Details"
+    },
+    "howItWorks": {
+      "title": "How to Apply",
+      "step1": {
+        "title": "Choose Product",
+        "description": "Browse products that fit your needs"
+      },
+      "step2": {
+        "title": "Calculate Premium",
+        "description": "Simulate premium with calculator"
+      },
+      "step3": {
+        "title": "Fill Form",
+        "description": "Complete personal and health information"
+      },
+      "step4": {
+        "title": "Policy Issued",
+        "description": "Pay and policy is immediately active"
+      }
+    },
+    "whyChooseUs": {
+      "title": "Why Choose Us?",
+      "subtitle": "Modern insurance experience with AI technology and 24/7 service",
+      "instant": {
+        "title": "Instant Process",
+        "description": "Quote in 90 seconds, approval in 3 minutes. No complicated paperwork."
+      },
+      "aiPowered": {
+        "title": "AI-Powered",
+        "description": "Smart chatbot helps choose products. AI reviews documents automatically for quick approval."
+      },
+      "transparent": {
+        "title": "Transparent Pricing",
+        "description": "No hidden fees. Everything clearly stated in quote. Compare products easily."
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "Customer service team ready to help anytime. Live chat, email, or phone."
+      },
+      "flexible": {
+        "title": "Flexible",
+        "description": "Customize coverage to fit your budget. Add or reduce benefits anytime."
+      },
+      "fastClaim": {
+        "title": "Fast Claims",
+        "description": "Claims processed within 3 business days. Upload documents directly from app."
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": {
+        "question": "How long does the insurance application approval process take?",
+        "answer": "For standard applications, our AI can approve in 3 minutes. For cases requiring manual review (pre-existing conditions, high sum assured), maximum 24 working hours."
+      },
+      "q2": {
+        "question": "Are there any hidden fees?",
+        "answer": "None! All fees are clearly stated in the quote. The premium you see is the final price to pay, including taxes and admin fees."
+      },
+      "q3": {
+        "question": "How do I file a claim?",
+        "answer": "Very easy! Login to your dashboard, click \"File Claim\", upload photos/documents, and submit. For simple claims, our AI can approve in 3 minutes. Our team will contact you immediately for complex claims."
+      },
+      "q4": {
+        "question": "Can I bundle multiple insurance products?",
+        "answer": "Yes! We encourage customers to bundle. Bundle discounts can reach 25% for combinations of 3 or more products. For example: Life + Health + Vehicle = save up to Rp 500,000/year."
+      },
+      "q5": {
+        "question": "How do I cancel my policy?",
+        "answer": "You can cancel anytime without penalty in the first 14 days (cooling-off period). After that, cancellation can be done through the dashboard with prorated refund according to remaining policy period."
+      },
+      "q6": {
+        "question": "Is my personal data safe?",
+        "answer": "Data security is our top priority. We use bank-level encryption (256-bit SSL), compliance with OJK regulations, and never share your data with third parties without permission."
+      }
+    },
+    "cta": {
+      "title": "Ready to Protect Your Loved Ones?",
+      "subtitle": "Get a free quote in 90 seconds. No credit card required. No obligation.",
+      "viewAllProducts": "View All Products",
+      "chatWithAI": "Chat with AI Assistant",
+      "features": "✓ 90-second process  ✓ No hidden fees  ✓ 24/7 Support"
+    },
+    "footer": {
+      "copyright": "© 2026 Insurance Policy System. Technical Test Project.",
+      "credits": "Bayu Anugerah • PT Logika Sarana Teknologi"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in to your account",
+      "email": "Email",
+      "password": "Password",
+      "emailPlaceholder": "name@email.com",
+      "passwordPlaceholder": "••••••••",
+      "loginButton": "Sign In",
+      "googleLogin": "Sign in with Google",
+      "processing": "Processing...",
+      "orLoginWith": "Or sign in with email",
+      "noAccount": "Don't have an account?",
+      "registerNow": "Register now",
+      "backToHome": "← Back to Home",
+      "demoAccount": "Demo Account:",
+      "errors": {
+        "invalidCredentials": "Invalid email or password",
+        "serverError": "Failed to connect to server"
+      },
+      "success": {
+        "registered": "Registration successful! Please sign in."
+      }
+    },
+    "register": {
+      "title": "Create New Account",
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm Password",
+      "registerButton": "Register",
+      "processing": "Processing...",
+      "haveAccount": "Already have an account?",
+      "loginNow": "Sign in now",
+      "errors": {
+        "passwordMismatch": "Passwords do not match",
+        "serverError": "Failed to connect to server"
+      }
+    }
+  },
+  "products": {
+    "title": "Insurance Products",
+    "subtitle": "Choose products that fit your needs",
+    "filters": {
+      "all": "All",
+      "life": "Life",
+      "health": "Health",
+      "vehicle": "Vehicle"
+    },
+    "coverage": "Sum Assured",
+    "premiumFrom": "Premium from",
+    "perMonth": "/month",
+    "viewDetail": "View Details",
+    "apply": "Apply Now"
+  },
+  "policies": {
+    "title": "My Policies",
+    "subtitle": "Manage all your insurance policies",
+    "status": {
+      "active": "Active",
+      "pending": "Pending",
+      "expired": "Expired",
+      "cancelled": "Cancelled"
+    },
+    "policyNumber": "Policy No.",
+    "product": "Product",
+    "premium": "Premium",
+    "coverage": "Sum Assured",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "actions": "Actions",
+    "viewDetails": "View Details",
+    "renew": "Renew",
+    "cancel": "Cancel",
+    "endorse": "Endorse",
+    "noPolicies": "No active policies"
+  },
+  "claims": {
+    "title": "My Claims",
+    "subtitle": "Submit and track your claims",
+    "newClaim": "File New Claim",
+    "claimNumber": "Claim No.",
+    "policy": "Policy",
+    "type": "Claim Type",
+    "amount": "Claim Amount",
+    "date": "Date",
+    "status": {
+      "draft": "Draft",
+      "submitted": "Submitted",
+      "underReview": "Under Review",
+      "approved": "Approved",
+      "rejected": "Rejected",
+      "paid": "Paid"
+    },
+    "viewDetails": "View Details",
+    "noClaims": "No claims yet"
+  },
+  "billing": {
+    "title": "Billing",
+    "subtitle": "Manage your payments and invoices",
+    "invoiceNumber": "Invoice No.",
+    "policy": "Policy",
+    "amount": "Amount",
+    "dueDate": "Due Date",
+    "status": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "overdue": "Overdue"
+    },
+    "payNow": "Pay Now",
+    "viewInvoice": "View Invoice",
+    "noInvoices": "No invoices"
+  },
+  "profile": {
+    "title": "My Profile",
+    "personalInfo": "Personal Information",
+    "fullName": "Full Name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "dateOfBirth": "Date of Birth",
+    "idNumber": "ID Number",
+    "updateProfile": "Update Profile",
+    "changePassword": "Change Password"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "notifications": "Notifications",
+    "security": "Security",
+    "preferences": "Preferences"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "markAsRead": "Mark as Read",
+    "markAllAsRead": "Mark All as Read",
+    "noNotifications": "No notifications"
+  }
+}
